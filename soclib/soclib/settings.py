@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -6,9 +7,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0#cjzut_5t$flx&-l15r&)ay%q=^cn2az%e-%98@)f541afa)b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = (os.environ.get("DEBUG", "False") == "True")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["0.0.0.0","localhost"]
 
 AUTH_USER_MODEL = "lms.LibraryUser"
 # Application definition
@@ -58,11 +59,27 @@ WSGI_APPLICATION = 'soclib.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+print(DEBUG, type(DEBUG))
+
+if DEBUG:
+    defaultDatabase = {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        } 
+else:
+    defaultDatabase = {
+        'ENGINE': os.environ.get('DB_DRIVER','django.db.backends.postgresql'),
+        'USER': os.environ.get('PG_USER','postgres'),
+        'PASSWORD':os.environ.get('PG_PASSWORD','postgres'),
+        'NAME': os.environ.get('PG_DB','postgres'),
+        'PORT': os.environ.get('PG_PORT','5432'),
+        'HOST': os.environ.get('PG_HOST','localhost'), # uses the container if set, otherwise it runs locally
     }
+
+print(defaultDatabase)
+
+DATABASES = {
+    'default': defaultDatabase
 }
 
 
