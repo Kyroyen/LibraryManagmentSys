@@ -16,6 +16,7 @@ class GenreSerializer(ModelSerializer):
 class BookSerializer(ModelSerializer):
     owned_by = LibraryUserSerializer(source = "current", read_only=True)
     genre = GenreSerializer(read_only = True)
+    new_owner = LibraryUserSerializer()
     class Meta:
         model = Book
         fields = [
@@ -25,7 +26,7 @@ class BookSerializer(ModelSerializer):
             "avaliable",
             "next_avaliable",
             "owned_by",
-            "new_owner",
+            # "new_owner",
         ]
         extra_kwargs = {
             "new_owner": {
