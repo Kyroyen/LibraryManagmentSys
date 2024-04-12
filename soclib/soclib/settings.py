@@ -7,12 +7,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0#cjzut_5t$flx&-l15r&)ay%q=^cn2az%e-%98@)f541afa)b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.environ.get("DEBUG", "False") == "True")
+DEBUG = (os.environ.get("DEBUG", "True") == "True")
 
 ALLOWED_HOSTS = ["0.0.0.0","localhost"]
 
 AUTH_USER_MODEL = "lms.LibraryUser"
 # Application definition
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -22,12 +24,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "rest_framework",
+    "corsheaders",
     "lms",
+    "firebase_admin",
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -59,7 +64,7 @@ WSGI_APPLICATION = 'soclib.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-print(DEBUG, type(DEBUG))
+# print(DEBUG, type(DEBUG))
 
 if DEBUG:
     defaultDatabase = {
@@ -76,7 +81,7 @@ else:
         'HOST': os.environ.get('PG_HOST','localhost'), # uses the container if set, otherwise it runs locally
     }
 
-print(defaultDatabase)
+# print(defaultDatabase)
 
 DATABASES = {
     'default': defaultDatabase
@@ -123,3 +128,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+FIREBASE_CONFIG = os.path.join(BASE_DIR, "firebase_admin_conf.json")
