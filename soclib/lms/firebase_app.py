@@ -5,4 +5,4 @@ import firebase_admin
 firebase_creds = credentials.Certificate(settings.FIREBASE_CONFIG)
 firebase_admin = firebase_admin.initialize_app(firebase_creds)
 
-print("Firebase App initlaized")
+print("Firebase App initialized")

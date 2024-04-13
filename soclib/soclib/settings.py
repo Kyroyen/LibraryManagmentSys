@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import cloudinary_storage
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,6 +28,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "lms",
     "firebase_admin",
+    "cloudinary",
+    "cloudinary_storage",
 ]
 
 MIDDLEWARE = [
@@ -37,8 +40,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # "/home/rishh/projects/society_lms/soclib/lms/fireauth_middleware"
-    "lms.fireauth_middleware.AuthenticationCookieMiddleware",
+    # "lms.fireauth_middleware.AuthenticationCookieMiddleware",
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -132,3 +134,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 FIREBASE_CONFIG = os.path.join(BASE_DIR, "firebase_admin_conf.json")
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME" : os.environ.get("CLOUDINARY_CLOUD_NAME", "dc9rse4w4"),
+    "API_KEY" : os.environ.get("CLOUDINARY_API_KEY", "319629242368637"),
+    "API_SECRET" :  os.environ.get('CLOUDINARY_API_SECRET',"ZZFgmf2Enwyj0QzVzRLaLy-Bz5Y"),
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"

@@ -59,7 +59,7 @@ class BookSerializer(ModelSerializer):
             "author",
             "avaliable",
             "next_avaliable",
-            # "owned_by",
+            "book_image",
             "unique_id",
             "new_owner",
             "overdue",
@@ -117,7 +117,7 @@ class BookRateSerializer(ModelSerializer):
         is_avaliable_now = self.instance.__getattribute__(
             "avaliable") if self.instance else False
         # print("is_avaliable", is_avaliable_now)
-        return super().is_valid(raise_exception=raise_exception) and (is_avaliable_now)
+        return (is_avaliable_now) and super().is_valid(raise_exception=raise_exception)
 
     def to_representation(self, instance):
         # print("instance", instance)

@@ -27,6 +27,7 @@ class Book(models.Model):
     author = models.CharField(max_length=40, null=True)
     avaliable = models.BooleanField(default=True)
     next_avaliable = models.DateField(blank=True, null=True)
+    book_image = models.FileField(upload_to="book-images", blank=True)
 
     current = models.ForeignKey(
         to = LibraryUser,
@@ -39,10 +40,7 @@ class Book(models.Model):
     def overdue(self):
         if (not self.avaliable) and timezone.now().date()>self.next_avaliable: # type: ignore
             return True
-        return  False
-
-    # def __repr__(self) -> str:
-    #     return f"{self.name.__str__()} - {self.author.__str__()}"
+        return False
     
     def __str__(self) -> str:
         return f"{self.name.__str__()} - {self.author.__str__()}"
