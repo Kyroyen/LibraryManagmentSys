@@ -14,7 +14,7 @@ class RegisterUserView(APIView):
 class UserView(APIView):
 
     def get(self, request):
-        serializer = LibraryUserSerializer(LibraryUser.objects.get(username=request.data["username"]))
+        serializer = LibraryUserSerializer(request.user)
         return Response(serializer.data)
 
 class BooksView(APIView):

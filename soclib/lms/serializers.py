@@ -4,15 +4,9 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import IntegerField, DateField
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from django.utils import timezone
-from django.conf import settings
 
-from firebase_admin import credentials
-from firebase_admin import auth
-import firebase_admin
 from firebase_admin.exceptions import FirebaseError
-firebase_creds = credentials.Certificate(settings.FIREBASE_CONFIG)
-firebase_admin = firebase_admin.initialize_app(firebase_creds)
-
+from firebase_admin import auth
 
 class LibraryUserSerializer(ModelSerializer):
 

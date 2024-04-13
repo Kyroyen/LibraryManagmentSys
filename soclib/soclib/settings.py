@@ -37,6 +37,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    # "/home/rishh/projects/society_lms/soclib/lms/fireauth_middleware"
+    "lms.fireauth_middleware.AuthenticationCookieMiddleware",
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
