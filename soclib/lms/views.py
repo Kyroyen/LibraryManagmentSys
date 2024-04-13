@@ -1,12 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.urls import resolve
 
 from .serializers import BookSerializer, BookRateSerializer, LibraryUserSerializer
 from .models import Book, LibraryUser
 
 class RegisterUserView(APIView):
-    def get(self, request):
+    def post(self, request):
         serilaizer = LibraryUserSerializer(data = request.data)
         if serilaizer.is_valid():
             serilaizer.save()
@@ -21,8 +20,6 @@ class UserView(APIView):
 class BooksView(APIView):
     
     def get(self, request):
-        # print(request.META["HTTP_NEW_USER"],type(request.META["HTTP_NEW_USER"]))
-        # print(resolve(request.path_info).url_name)
         queryset = Book.objects.all()
         search = self.request.GET.get("search", default=None)
         avaliable  = self.request.GET.get('avaliable', default=None)

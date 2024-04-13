@@ -11,6 +11,7 @@ import firebase_admin
 firebase_creds = credentials.Certificate(settings.FIREBASE_CONFIG)
 firebase_admin = firebase_admin.initialize_app(firebase_creds)
 
+
 class AuthenticationCookieMiddleware(object):
     def __init__(self, get_response) -> None:
         self.get_response = get_response
@@ -26,7 +27,8 @@ class AuthenticationCookieMiddleware(object):
                     bearer
                 )
                 firebase_user_id = decoded_token["user_id"]
-                request.user = get_object_or_404(LibraryUser, fire_id = firebase_user_id)
+                request.user = get_object_or_404(
+                    LibraryUser, fire_id=firebase_user_id)
             except:
                 response = Response(data={
                     'detail': 'Authentication Failed'}, status=401
@@ -39,8 +41,7 @@ class AuthenticationCookieMiddleware(object):
             response = self.get_response(request)
         else:
             response = Response(data={
-                    'detail': 'Authentication Failed'}, status=401
-                )
+                'detail': 'BAD REQUEST'}, status=401
+            )
 
         return response
-        

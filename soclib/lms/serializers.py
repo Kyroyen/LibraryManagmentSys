@@ -1,3 +1,5 @@
+from utils.days_to_price import days_to_price
+from .models import Book, Genre, LibraryUser
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import IntegerField, DateField
 from rest_framework.exceptions import ErrorDetail, ValidationError
@@ -11,8 +13,6 @@ from firebase_admin.exceptions import FirebaseError
 firebase_creds = credentials.Certificate(settings.FIREBASE_CONFIG)
 firebase_admin = firebase_admin.initialize_app(firebase_creds)
 
-from .models import Book, Genre, LibraryUser
-from utils.days_to_price import days_to_price
 
 class LibraryUserSerializer(ModelSerializer):
 
@@ -26,27 +26,23 @@ class LibraryUserSerializer(ModelSerializer):
             "fire_id",
         ]
         extra_kwargs = {
-            "fire_id" : {
-                "read_only" : True,
+            "fire_id": {
+                "read_only": True,
             },
         }
-    
+
     def save(self, **kwargs):
         temp = super().save(**kwargs)
         try:
             user = auth.create_user(
-                email = self.instance.email, # type: ignore
-                email_verified = False,
-                display_name = f"{self.instance.first_name} {self.instance.last_name}",# type: ignore
-                uid = self.instance.fire_id,# type: ignore
+                email=self.instance.email,  # type: ignore
+                email_verified=False,
+                display_name=f"{self.instance.first_name} {self.instance.last_name}",# type: ignore
+                uid=self.instance.fire_id,  # type: ignore
             )
         except FirebaseError:
             raise ValidationError("Firebase Error")
         return temp
-        
-
-
-    
 
 
 class GenreSerializer(ModelSerializer):
