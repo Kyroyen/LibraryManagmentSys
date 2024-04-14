@@ -7,6 +7,19 @@ from utils.hex_uuid import get_uuid_hexed
 
 class LibraryUser(AbstractUser, PermissionsMixin):
     fire_id = models.CharField(max_length=128, unique=True, default= get_uuid_hexed, editable=False)
+    book_history = models.ManyToManyField(
+        to='Book',
+        through="ReadingHistory",
+        )
+
+class ReadingHistory(models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["user","book","start_date"], name = "unique_history")
+        ]
+    user = models.ForeignKey(to = "LibraryUser", on_delete=models.DO_NOTHING)
+    book = models.ForeignKey(to = "Book", on_delete=models.DO_NOTHING)
+    start_date = models.DateField(auto_now=True)
 
 class Genre(models.Model):
     name = models.CharField(max_length=20, null=True)
@@ -30,7 +43,7 @@ class Book(models.Model):
     book_image = models.FileField(upload_to="book-images", blank=True)
 
     current = models.ForeignKey(
-        to = LibraryUser,
+        to = "LibraryUser",
         on_delete = models.SET_NULL,
         related_name = "current_owner",
         null = True,

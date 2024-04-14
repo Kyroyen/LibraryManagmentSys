@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-0#cjzut_5t$flx&-l15r&)ay%q=^cn2az%e-%98@)f541afa)b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get("DEBUG", "True") == "True")
 
-ALLOWED_HOSTS = ["0.0.0.0","localhost"]
+ALLOWED_HOSTS = ["0.0.0.0","localhost","*"]
 
 AUTH_USER_MODEL = "lms.LibraryUser"
 # Application definition

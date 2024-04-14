@@ -17,6 +17,12 @@ class UserView(APIView):
         serializer = LibraryUserSerializer(request.user)
         return Response(serializer.data)
 
+class UserBookView(APIView):
+
+    def get(self, request):
+        username = request.data.get('username')
+        serializer = BookSerializer(LibraryUser.objects.get(username=username), many=True)
+
 class BooksView(APIView):
     
     def get(self, request):

@@ -123,6 +123,10 @@ class BookRateSerializer(ModelSerializer):
         # print("instance", instance)
         # print("self", self)
         # print("self", self._data)
+        buy_token = {
+            "book_id" : self.instance.__getattribute__("unique_id"),
+            
+        }
         data = {
             "return_date": (timezone.now() + timezone.timedelta(days=self.total_days)).date(),
             "price": days_to_price(self.total_days),
