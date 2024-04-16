@@ -10,6 +10,7 @@ class LibraryUser(AbstractUser, PermissionsMixin):
     book_history = models.ManyToManyField(
         to='Book',
         through="ReadingHistory",
+        related_name = "book_history"
         )
 
 class ReadingHistory(models.Model):

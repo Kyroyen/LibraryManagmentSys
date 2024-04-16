@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .serializers import BookSerializer, BookRateSerializer, LibraryUserSerializer
+from .serializers import BookSerializer, BookRateSerializer, LibraryUserSerializer, BookBuySerializer
 from .models import Book, LibraryUser
 
 class RegisterUserView(APIView):
@@ -51,7 +51,10 @@ class BookView(APIView):
             book = Book.objects.get(unique_id = book_id)
         except  Book.DoesNotExist:
             return Response(status=404)
-        serialzer = BookSerializer(instance=book, data = request.data, partial = True)
+        data = request.data
+        data.update({"new_owner":request.user})
+        print(data)
+        serialzer = BookSerializer(instance=book, data = data, partial = True)
         
         if serialzer.is_valid():
             print("True")
@@ -69,9 +72,27 @@ class RateQuotes(APIView):
             return Response(status=404)
         serializer = BookRateSerializer(instance=book, data = request.data, partial = True)
         if serializer.is_valid():
-            print(True)
+            print(serializer.data)
+            response = Response(
+                data=serializer.data,
+            )
         else:
-            print(False)
-        print(serializer.data)
-        return Response()
-        
+            response = Response(data = serializer.errors, status=400)
+        return response
+    
+    def post(self, request, book_id):
+        try:
+            book = Book.objects.get(unique_id = book_id)
+        except Book.DoesNotExist:
+            return Response(status=404)
+        data = request.data
+        print(data)
+        data.update({"user" : request.user, "book": book})
+        print("dat:",data)
+        serializer = BookBuySerializer(**data)
+        if serializer.is_valid():
+            book_serializer = serializer.save()
+            response = Response(data=book_serializer.data)
+        else:
+            response = Response(data=serializer.error_messages, status=400)
+        return response

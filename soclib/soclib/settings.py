@@ -10,6 +10,8 @@ SECRET_KEY = 'django-insecure-0#cjzut_5t$flx&-l15r&)ay%q=^cn2az%e-%98@)f541afa)b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get("DEBUG", "True") == "True")
 
+USE_DEFAULT_AUTH = True
+
 ALLOWED_HOSTS = ["0.0.0.0","localhost","*"]
 
 AUTH_USER_MODEL = "lms.LibraryUser"
@@ -40,7 +42,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # "lms.fireauth_middleware.AuthenticationCookieMiddleware",
+    "lms.fireauth_middleware.AuthenticationCookieMiddleware",
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
