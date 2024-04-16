@@ -1,11 +1,10 @@
 import {useState} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
-import {Avatar, Card, Searchbar} from 'react-native-paper';
+import {Card, Searchbar} from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HomeCat from '../Components/HomeCat';
 
 const Home = () => {
-  const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
   const [searchQuery, setSearchQuery] = useState('');
   return (
     <ScrollView

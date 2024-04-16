@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     marginHorizontal: 20,
+    marginBottom: 45,
   },
   outerBox: {
     borderBottomWidth: 0.5,
