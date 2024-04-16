@@ -152,19 +152,13 @@ class BookReturnSerializer(BaseSerializer):
 
     def update_owner(self):
         book = self.book.instance
-        new_owner = self.user.instance
-        dtbr = self.days_to_be_rented
-        book.book_history.add(
-            new_owner
-            )
-        book.avaliable = False
-        book.current = new_owner
-        book.next_avaliable = (timezone.now() + timezone.timedelta(days=dtbr)).date()
+        book.current = None
+        book.avalaible = True
 
     def save(self):
-        print(self.user, self.book, self.days_to_be_rented,sep="\n-------------------\n")
         self.update_owner()
         self.book.instance.save()
+        # print("hollslsls")
         return self.book
 
 class BookRateSerializer(ModelSerializer):

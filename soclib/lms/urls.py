@@ -8,5 +8,5 @@ urlpatterns = [
     path("register/", RegisterUserView.as_view(), name = "register-user"),
     path("books/", BooksView.as_view(), name="Books"),
     path("book/<uuid:book_id>/", BookView.as_view(), name="Book"),
-    path("book/<uuid:book_id>/buy/", RateQuotes.as_view(), name="Book-price"),
+    path("book/<uuid:book_id>/borrow-return/", RateQuotes.as_view(), name="Book-price"),
 ]

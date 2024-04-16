@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .serializers import BookSerializer, BookRateSerializer, LibraryUserSerializer, BookBuySerializer
+from .serializers import BookSerializer, BookRateSerializer, LibraryUserSerializer, BookBuySerializer, BookReturnSerializer
 from .models import Book, LibraryUser
 
 class RegisterUserView(APIView):
@@ -79,6 +79,21 @@ class RateQuotes(APIView):
         else:
             response = Response(data = serializer.errors, status=400)
         return response
+
+    def delete(self, request, book_id):
+        try:
+            book = Book.objects.get(unique_id = book_id)
+        except Book.DoesNotExist:
+            return Response(status=404)
+        serializer = BookReturnSerializer(request.user, book)
+        if serializer.is_valid():
+            book_serializer = serializer.save()
+            response = Response(data=book_serializer.data)
+        else:
+            response = Response(data=serializer.error_messages, status=400)
+        return response
+
+        
     
     def post(self, request, book_id):
         try:
