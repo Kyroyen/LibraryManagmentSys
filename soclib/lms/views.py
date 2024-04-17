@@ -46,7 +46,14 @@ class BooksView(APIView):
 class UserBooksView(APIView):
 
     def get(self, request):
-        serializer = BookSerializer(request.user.book_history.all(), many =True)
+        queryset = request.user
+        history = (self.request.GET.get("history", default="false") == "true") 
+        print("history",history)
+        if history:
+            queryset = queryset.book_history.all()
+        else:
+            queryset = queryset.current_owner.all()
+        serializer = BookSerializer(queryset, many =True)
         return Response(data = serializer.data)
 
 class BookView(APIView):

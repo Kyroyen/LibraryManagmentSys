@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django.urls import path
 
-from .views import BooksView, BookView, RateQuotes, RegisterUserView, UserView, GenreView, BookGenreView
+from .views import BooksView, BookView, RateQuotes, RegisterUserView, UserView, GenreView, BookGenreView, UserBooksView
 
 urlpatterns = [
     path("", UserView.as_view(), name = "user-details"),
+    path("owned/", UserBooksView.as_view(), name = "user-books"),
     path("register/", RegisterUserView.as_view(), name = "register-user"),
     path("books/", BooksView.as_view(), name="Books"),
     path("book/<uuid:book_id>/", BookView.as_view(), name="Book"),
