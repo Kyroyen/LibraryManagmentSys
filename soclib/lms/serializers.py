@@ -33,8 +33,6 @@ class LibraryUserSerializer(ModelSerializer):
 
     def save(self, **kwargs):
         temp = super().save(**kwargs)
-        # print(self.data, self.validated_data)
-
         try:
             user = auth.create_user(
                 email=self.instance.email,  # type: ignore
@@ -189,23 +187,17 @@ class BookRateSerializer(ModelSerializer):
         return True
 
     def is_valid(self, *, raise_exception=False):
-        try: assert ("days_to_be_rented" in self.initial_data)
+        try:
+            assert ("days_to_be_rented" in self.initial_data) # type: ignore
         except AssertionError as e:
             raise ValidationError("days_to_be_rented should be included")
         is_avaliable_now = self.instance.__getattribute__(
             "avaliable") if self.instance else False
         superdec = super().is_valid(raise_exception=raise_exception)
-        print("superdec", superdec)
+        print("superdec", superdec, is_avaliable_now)
         return superdec and (is_avaliable_now)
 
     def to_representation(self, instance):
-        # print("instance", instance)
-        # print("self", self)
-        # print("self", self._data)
-        buy_token = {
-            "book_id": self.instance.__getattribute__("unique_id"),
-
-        }
         data = {
             "return_date": (timezone.now() + timezone.timedelta(days=self.total_days)).date(),
             "price": days_to_price(self.total_days),

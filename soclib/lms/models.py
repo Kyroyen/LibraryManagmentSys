@@ -34,6 +34,7 @@ class Book(models.Model):
         on_delete = models.CASCADE,
         related_name = "genre",
         null = True,
+        blank=True,
     )
 
     unique_id = models.UUIDField(unique=True, default=uuid.uuid4)
