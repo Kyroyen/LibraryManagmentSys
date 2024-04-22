@@ -92,7 +92,7 @@ class GenreView(APIView):
 class BookGenreView(APIView):
 
     def get(self, request, genre):
-        serializer = BookSerializer(get_object_or_404(Genre, name=genre).genre.all(), many = True)
+        serializer = BookSerializer(get_object_or_404(Genre, name=genre).genre.all(), many = True) # type: ignore
         return Response(data = serializer.data)
 
 
@@ -122,7 +122,7 @@ class RateQuotes(APIView):
         serializer = BookReturnSerializer(request.user, book)
         if serializer.is_valid():
             book_serializer = serializer.save()
-            response = Response(data=book_serializer.data)
+            response = Response(data=book_serializer.data) # type: ignore
         else:
             response = Response(data=serializer.error_messages, status=400)
         return response
@@ -139,7 +139,7 @@ class RateQuotes(APIView):
         serializer = BookBuySerializer(**data)
         if serializer.is_valid():
             book_serializer = serializer.save()
-            response = Response(data=book_serializer.data)
+            response = Response(data=book_serializer.data) # type: ignore
         else:
             response = Response(data=serializer.error_messages, status=400)
         return response

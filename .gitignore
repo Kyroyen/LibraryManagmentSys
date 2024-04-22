@@ -2,3 +2,7 @@ env/
 *.pyc
 *.sqlite3
 firebase_admin_conf.json
+*htmlcov*
+.coverage
+*__pycache__*
+*.pytest_cache*
