@@ -16,7 +16,7 @@ const items = [
     },
     {
       Catid: '4',
-      name: 'Science ',
+      name: 'Science',
       imagesrc: require('../Assets/Caterory/chemistry.png'),
     },
     {

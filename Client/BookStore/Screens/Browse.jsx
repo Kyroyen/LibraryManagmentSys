@@ -9,8 +9,13 @@ import {
 } from 'react-native';
 import React from 'react';
 import items from '../Data/Caterory';
+import {useNavigation} from '@react-navigation/native';
 
 const Browse = () => {
+  const navigation = useNavigation();
+  const navigateToListBook = genre => {
+    navigation.navigate('ListBook',{genre});
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -19,7 +24,9 @@ const Browse = () => {
         {items.map(obj => {
           return (
             <View style={styles.outerBox} key={obj.name}>
-              <TouchableOpacity key={obj.name}>
+              <TouchableOpacity
+                key={obj.id}
+                onPress={() => navigateToListBook(obj.name)}>
                 <View style={styles.mainItem}>
                   <Image source={obj.imagesrc} style={styles.image} />
                   <Text style={styles.text}>{obj.name}</Text>
@@ -47,7 +54,6 @@ const styles = StyleSheet.create({
   },
   outerBox: {
     borderBottomWidth: 0.5,
-    // borderBottomColor: '#9BA4B5',
     borderBottomColor: 'grey',
   },
   mainItem: {
@@ -64,6 +70,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     color: 'black',
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
   },
 });

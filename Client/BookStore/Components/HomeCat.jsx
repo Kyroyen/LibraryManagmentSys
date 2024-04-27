@@ -6,12 +6,25 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
-import data from '../Data/DummyData';
-import { useNavigation } from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
 
-const HomeCat = ({title}) => {
+const HomeCat = ({title, genre}) => {
+  const [data, setData] = useState([]);
   const navigation = useNavigation();
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`http://192.168.58.124:8000/api/genre/${genre}/`);
+      setData(res.data);
+    } catch (error) {
+      console.log('Error in fetching', error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [genre]);
+
   return (
     <View>
       <View style={{marginLeft: 15, marginVertical: 10}}>
@@ -22,7 +35,8 @@ const HomeCat = ({title}) => {
           data={data}
           horizontal={true}
           renderItem={({item}) => (
-            <TouchableOpacity   onPress={() => navigation.navigate('BookPage')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('BookPage', {book: item})}>
               <View style={styles.SecContainer}>
                 <Image
                   source={{uri: item.book_image}}
@@ -55,6 +69,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 5,
+    maxWidth: 100,
     marginBottom: -10,
     textAlign: 'center',
     fontWeight: 'bold',

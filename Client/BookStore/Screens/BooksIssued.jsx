@@ -3,7 +3,11 @@ import React from 'react';
 import CustomBook from '../Components/CustomBook';
 
 const BooksIssued = () => {
-  return <CustomBook />;
+  return (
+    <View>
+      <Text>BookIssued</Text>
+    </View>
+  )
 };
 
 export default BooksIssued;

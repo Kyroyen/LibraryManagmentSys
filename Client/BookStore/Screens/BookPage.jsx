@@ -1,8 +1,34 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Card} from 'react-native-paper';
+import {useRoute} from '@react-navigation/native';
+import {Calendar} from 'react-native-calendars';
 
-const BookPage = () => {
+const BookPage = ({}) => {
+  const calculateReturnDate = () => {
+    const currentDate = new Date();
+    const threeDaysLater = new Date(
+      currentDate.setDate(currentDate.getDate() + 3),
+    );
+    const formattedDate = threeDaysLater.toLocaleDateString('en-US');
+    setReturnDate(formattedDate);
+  };
+  const [returnDate, setReturnDate] = useState('');
+  const [buttonData, setButtonData] = useState('');
+  useEffect(() => {
+    calculateReturnDate();
+  }, []);
+
+  useEffect(() => {
+    if (book.available) {
+      setButtonData('Buy now');
+    } else {
+      setButtonData('Not available');
+    }
+  }, [book]);
+
+  const route = useRoute();
+  const {book} = route.params;
   return (
     <ScrollView style={{marginBottom: 100}}>
       <View
@@ -15,17 +41,18 @@ const BookPage = () => {
           borderBottomStartRadius: 40,
         }}>
         <Card style={{width: 180}}>
-          <Card.Cover
-            source={require('../Assets/Books.jpeg')}
-            style={{height: 270}}
-          />
+          <Card.Cover source={{uri: book.book_image}} style={{height: 270}} />
         </Card>
       </View>
       <View style={{padding: 20, gap: 10}}>
-        <Text style={styles.Title}>Harry Potter and the Philosopher Stone</Text>
-        <Text style={styles.author}>Author: JK Rowling</Text>
-        <Text style={styles.Available}>Available: Yes</Text>
-        <Text style={styles.return}>Return : 20/12/2024</Text>
+        <Text style={styles.Title}>{book.name}</Text>
+        <Text style={styles.author}>Author: {book.author}</Text>
+        <Text style={styles.Available}>
+          Available: {book.avaliable ? 'Yes' : 'No'}
+        </Text>
+        <Text style={styles.return}>
+          Return : <Calendar />
+        </Text>
         <Text styles={styles.desc}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus
           inventore voluptas assumenda maiores ipsam nisi veniam ipsum
@@ -34,8 +61,12 @@ const BookPage = () => {
         </Text>
       </View>
 
-      <Button icon="cart" mode="contained" style = {{marginHorizontal: 20, marginBottom: 15}} buttonColor='#CE5959'>
-        Add to Cart
+      <Button
+        icon="cart"
+        mode="contained"
+        style={{marginHorizontal: 20, marginBottom: 15}}
+        buttonColor="#CE5959">
+        {book.avaliable ? 'Buy now' : 'Book is not available'}
       </Button>
     </ScrollView>
   );

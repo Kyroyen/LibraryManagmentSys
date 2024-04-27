@@ -5,33 +5,53 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import React from 'react';
-import {Text, MD2Colors} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
+import {Text} from 'react-native-paper';
+import axios from 'axios';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-const CustomBook = ({book}) => {
+const CustomBookList = ({genre}) => {
+  const [books, setBooks] = useState([]);
   const navigation = useNavigation();
+  const route = useRoute();
+  const {book} = route.params;
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(
+        `http://192.168.58.124:8000/api/genre/${genre}/`,
+      );
+      setBooks(res.data);
+    } catch (error) {
+      console.log('Error in fetching', error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [genre]);
   return (
     <ScrollView>
-      {book.map((book, index) => (
-        <View key={index} style={styles.container}>
+      {books.map(book => (
+        <View key={book.unique_id} style={styles.container}>
           <Image
             source={{uri: book.book_image}}
             style={styles.ImagePic}
             resizeMode={'cover'}
           />
           <View style={styles.ContactDetails}>
-            <View style={{gap: 5, fontSize: 20, marginRight: '19%'}}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: 'Montserrat-Light',
-                  color: MD2Colors.black,
-                  fontWeight: '900',
-                }}>
-                {book.name}
-              </Text>
-              <Text style={{color: 'grey'}}>{book.author}</Text>
+            <View style={{gap: 5, fontSize: 20, marginRight: '15%'}}>
+              <View style={{width: 120}}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontFamily: 'Montserrat-Light',
+                    fontWeight: '900',
+                    color: 'black',
+                  }}>
+                  {book.name}
+                </Text>
+              </View>
+              <Text style={{color: 'grey', maxWidth: 130}}>{book.author}</Text>
               <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
                 <View
                   style={{
@@ -66,10 +86,9 @@ const CustomBook = ({book}) => {
                   backgroundColor: '#DD5746',
                   width: 100,
                   borderRadius: 5,
-                }}>
-                <Text
-                  style={{textAlign: 'center', color: 'white'}}
-                  onPress={() => navigation.navigate('BookPage', {book: book})}>
+                }}
+                onPress={() => navigation.navigate('BookPage', {book: book})}>
+                <Text style={{textAlign: 'center', color: 'white'}}>
                   View Book
                 </Text>
               </TouchableOpacity>
@@ -81,7 +100,7 @@ const CustomBook = ({book}) => {
   );
 };
 
-export default CustomBook;
+export default CustomBookList;
 
 const styles = StyleSheet.create({
   container: {
@@ -117,6 +136,7 @@ const styles = StyleSheet.create({
   },
   ContactDetails: {
     marginTop: '5%',
+
     gap: 10,
   },
   increment: {
