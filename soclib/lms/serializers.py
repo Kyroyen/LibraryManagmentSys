@@ -2,6 +2,7 @@ from rest_framework.fields import empty
 from utils.days_to_price import days_to_price
 from .models import Book, Genre, LibraryUser
 from rest_framework.serializers import ModelSerializer, BaseSerializer
+from rest_framework import serializers
 from rest_framework.serializers import IntegerField, DateField
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from django.utils import timezone
@@ -12,6 +13,8 @@ from firebase_admin import auth
 
 class LibraryUserSerializer(ModelSerializer):
 
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = LibraryUser
         fields = [
@@ -19,6 +22,7 @@ class LibraryUserSerializer(ModelSerializer):
             "last_name",
             "username",
             "email",
+            "password",
             "fire_id",
         ]
         extra_kwargs = {
@@ -27,22 +31,11 @@ class LibraryUserSerializer(ModelSerializer):
             },
         }
 
-    def is_valid(self, *, raise_exception=False):
-        # print(self.initial_data)
-        return super().is_valid(raise_exception=raise_exception)
-
-    def save(self, **kwargs):
-        temp = super().save(**kwargs)
-        try:
-            user = auth.create_user(
-                email=self.instance.email,  # type: ignore
-                email_verified=False, 
-                display_name=f"{self.instance.first_name} {self.instance.last_name}", # type: ignore
-                uid=self.instance.fire_id,  # type: ignore
-            )
-        except FirebaseError:
-            raise ValidationError("Firebase Error")
-        return temp
+    def create(self, validated_data):
+        user = super().create(validated_data)
+        user.set_password(validated_data["password"])
+        user.save()
+        return user
 
 
 class GenreSerializer(ModelSerializer):

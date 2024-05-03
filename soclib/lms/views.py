@@ -8,6 +8,10 @@ from .models import Book, LibraryUser, Genre
 
 
 class RegisterUserView(APIView):
+
+    permission_classes = []
+    authentication_classes = []
+
     def post(self, request):
         serilaizer = LibraryUserSerializer(data=request.data)
         if serilaizer.is_valid():
