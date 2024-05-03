@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .models import *
-# Register your models here.
+from .mail_sender import make_make_data, send_all_mails
+
 
 @admin.register(LibraryUser)
 class LibraryUserAdmin(admin.ModelAdmin):
@@ -11,7 +12,14 @@ class LibraryUserAdmin(admin.ModelAdmin):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["name", "overdue", "current"]
+    actions = ("reminder_email",)
+
+    @admin.action(description="Send reminder emails")
+    def reminder_email(modeladmin, request, queryset):
+        all_mail_list = make_make_data(queryset.all())
+        send_all_mails(all_mail_list)
+
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):

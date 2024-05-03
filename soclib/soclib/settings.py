@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "firebase_admin",
     "cloudinary",
     "cloudinary_storage",
+    "rest_framework_simplejwt",
 ]
 
 MIDDLEWARE = [
@@ -144,6 +145,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         "lms.fireauth_middleware.CustomAuth",
         # 'rest_framework.authentication.SessionAuthentication',
     ),
@@ -160,3 +162,10 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'kyroyen@gmail.com'
+EMAIL_HOST_PASSWORD = 'zrpodgtxqqrlhylw'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

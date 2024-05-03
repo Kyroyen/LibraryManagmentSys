@@ -49,6 +49,7 @@ class Book(models.Model):
         on_delete = models.SET_NULL,
         related_name = "current_owner",
         null = True,
+        blank= True,
     )
 
     @property
