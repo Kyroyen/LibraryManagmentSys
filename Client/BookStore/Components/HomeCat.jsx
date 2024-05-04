@@ -9,19 +9,51 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const HomeCat = ({title, genre}) => {
   const [data, setData] = useState([]);
+  const [isToken, setIsToken] = useState(null);
   const navigation = useNavigation();
-  const fetchData = async () => {
+
+  const getToken = async () => {
     try {
-      const res = await axios.get(`http://192.168.58.124:8000/api/genre/${genre}/`);
+      const value = await AsyncStorage.getItem('token');
+      if (value !== null) {
+        setIsToken(value);
+        return value;
+      } else {
+        console.log('Token not found');
+        return null;
+      }
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  };
+
+  const fetchData = async () => {
+    let token = isToken;
+    if(token==null){
+      token = await getToken();
+    }
+    try {
+      const res = await axios.get(`http://192.168.58.124:8000/api/genre/${genre}/`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      },
+      );
       setData(res.data);
     } catch (error) {
       console.log('Error in fetching', error);
     }
   };
   useEffect(() => {
+    getToken();
     fetchData();
   }, [genre]);
 

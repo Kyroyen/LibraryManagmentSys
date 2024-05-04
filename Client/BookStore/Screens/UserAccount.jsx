@@ -6,14 +6,58 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {React, useState} from 'react';
+import {React, useEffect, useState} from 'react';
 import {Avatar, Title, Caption} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const UserAccount = () => {
+  const [isToken, setIsToken] = useState(null);
+
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if (value !== null) {
+        setIsToken(value);
+        return value;
+      } else {
+        console.log('Token not found');
+        return null;
+      }
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+    fetchData();
+  });
+
   const fetchData = async () => {
-    const res = axios.get('http://192.168.58.124:8000/api/');
+    let token = isToken;
+    if (token == null) {
+      token = await getToken();
+    }
+    try {
+      const res = await axios.get('http://192.168.58.124:8000/api/', {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      console.log(res);
+      setFirstName(res.data.first_name);
+      setLastName(res.data.last_name);
+      setUsername(res.data.username);
+      setEmailAddress(res.data.email);
+      console.log(firstName);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const [firstName, setFirstName] = useState('');
@@ -46,7 +90,7 @@ const UserAccount = () => {
                   },
                 ]}>
                 <Text>
-                  {firstName}
+                  {firstName }{" "}
                   {lastName}
                 </Text>
               </Title>

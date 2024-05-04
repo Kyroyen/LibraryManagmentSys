@@ -11,13 +11,13 @@ import {useNavigation} from '@react-navigation/native';
 
 const CustomBook = ({book}) => {
   const navigation = useNavigation();
-  console.log(book);
+  console.log("book:", book);
   return (
     <View>
       <ScrollView>
         <View key={book.index} style={styles.container}>
           <Image
-            source={{uri: book.item.book_image}}
+            source={{uri: book.book_image}}
             style={styles.ImagePic}
             resizeMode={'cover'}
           />
@@ -31,11 +31,11 @@ const CustomBook = ({book}) => {
                     color: MD2Colors.black,
                     fontWeight: '900',
                   }}>
-                  {book.item.name}
+                  {book.name}
                 </Text>
               </View>
               <Text style={{color: 'grey', maxWidth: 130}}>
-                {book.item.author}
+                {book.author}
               </Text>
               <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
                 <View

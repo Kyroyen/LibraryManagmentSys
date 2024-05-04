@@ -13,12 +13,15 @@ import {useRoute} from '@react-navigation/native';
 import {Calendar} from 'react-native-calendars';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {BlurView} from '@react-native-community/blur';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const BookPage = ({}) => {
   const [buttonData, setButtonData] = useState('');
   const [selected, setSelected] = useState('');
   const [calenderOpen, setCalenderOpen] = useState(false);
   const [daysDifference, setDaysDifference] = useState(0);
+  const [isToken, setIsToken] = useState(null);
   const screenHeight = Dimensions.get('window').height;
 
   const calculateDaysDifference = selectedDate => {
@@ -31,7 +34,24 @@ const BookPage = ({}) => {
     setDaysDifference(Math.ceil(differenceInDays));
   };
 
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if (value !== null) {
+        setIsToken(value);
+        return value;
+      } else {
+        console.log('Token not found');
+        return null;
+      }
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  };
+
   useEffect(() => {
+    getToken();
     if (book.available) {
       setButtonData('Buy now');
     } else {
@@ -43,6 +63,10 @@ const BookPage = ({}) => {
   const {book} = route.params;
 
   const handleBorrowReturn = async () => {
+    let token = isToken;
+    if(token == null){
+      token = await getToken();
+    }
     try {
       console.log('Book unique ID:', book.unique_id);
       console.log('Days difference:', daysDifference);
@@ -57,6 +81,7 @@ const BookPage = ({}) => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify(requestData),
         },

@@ -7,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
 import items from '../Data/Caterory';
 import {useNavigation} from '@react-navigation/native';
 

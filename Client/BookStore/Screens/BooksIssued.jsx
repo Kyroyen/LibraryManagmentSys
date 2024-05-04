@@ -8,23 +8,55 @@ import {
 import React, {useState, useEffect} from 'react';
 import CustomBook from '../Components/CustomBook';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BooksIssued = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [booksOwned, setBooksOwned] = useState([]);
+  const [isToken, setIsToken] = useState(null);
 
-  useEffect(() => {
-    const fetchBooksOwned = async () => {
-      try {
-        const response = await axios.get(
-          'http://192.168.58.124:8000/api/owned/',
-        );
-        setBooksOwned(data);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if (value !== null) {
+        console.log(value);
+        setIsToken(value);
+        return value;
+      } else {
+        console.log('Token not found');
+        return null;
       }
-    };
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  };
+
+  const fetchBooksOwned = async () => {
+    let token = isToken;
+    if(token == null) {
+      token = await getToken();
+    }
+    try {
+      const response = await axios.get(
+        'http://192.168.58.124:8000/api/owned/',
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        },
+      );
+      console.log(response.data);
+      setBooksOwned(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    getToken();
     console.log(booksOwned);
     fetchBooksOwned();
   }, []);
@@ -45,7 +77,6 @@ const BooksIssued = () => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {

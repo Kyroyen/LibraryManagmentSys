@@ -4,26 +4,54 @@ import {
   View,
   ScrollView,
   Text,
-  FlatList,
-  TouchableOpacity,
+
 } from 'react-native';
 import {Card, Searchbar, ActivityIndicator} from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HomeCat from '../Components/HomeCat';
-import axios, { all } from 'axios';
+import axios, {all} from 'axios';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
-  const API_ENDPOINT = `http://192.168.58.124:8000/api/books/`;
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isToken, setIsToken] = useState(null);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const navigation = useNavigation();
 
-  const fetchData = async links => {
+  const getToken = async () => {
     try {
-      const response = await axios.get(links);
+      const value = await AsyncStorage.getItem('token');
+      if (value !== null) {
+        console.log(value);
+        setIsToken(value);
+        return value;
+      } else {
+        console.log('Token not found');
+        return null;
+      }
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  };
+
+  const fetchData = async links => {
+    let token = isToken;
+    if(token == null) {
+      token = await getToken();
+    }
+    try {
+      const response = await axios.get(links,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+        },
+      );
       setIsLoading(false);
       return response.data;
     } catch (error) {
@@ -34,12 +62,18 @@ const Home = () => {
   };
 
   const handleSearch = async () => {
-    const searchEndpoint =
+    try{
+      const searchEndpoint =
       `http://192.168.58.124:8000/api/books/` + `${'?'}search=${searchQuery}`;
     setIsLoading(true);
     const bookData = await fetchData(searchEndpoint);
     navigation.navigate('SeachedBook', {books: bookData});
-    console.log(data);
+    // console.log(data);
+    }
+    catch(error){
+      console.log(error);
+    }
+   
   };
 
   const handleClearSearch = () => {
@@ -48,13 +82,18 @@ const Home = () => {
   };
 
   const getAllBooks = async () => {
-    const allBooksData = await fetchData(
-      `http://192.168.58.124:8000/api/books/`,
-    );
-    setData(allBooksData);
+    try {
+      const allBooksData = await fetchData(
+        `http://192.168.58.124:8000/api/books/`);
+      setData(allBooksData);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
+    setError(null)
+    getToken();
     setIsLoading(true);
     getAllBooks();
   }, []);

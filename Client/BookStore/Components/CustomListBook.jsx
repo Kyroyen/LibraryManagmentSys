@@ -9,17 +9,46 @@ import React, {useState, useEffect} from 'react';
 import {Text} from 'react-native-paper';
 import axios from 'axios';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const CustomBookList = ({genre}) => {
   const [books, setBooks] = useState([]);
+  const [isToken, setIsToken] = useState(null);
   const navigation = useNavigation();
   const route = useRoute();
   const {book} = route.params;
 
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if (value !== null) {
+        setIsToken(value);
+        return value;
+      } else {
+        console.log('Token not found');
+        return null;
+      }
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  };
+
   const fetchData = async () => {
+    let token = isToken;
+    if(token == null) {
+      token = await getToken();
+    }
     try {
       const res = await axios.get(
         `http://192.168.58.124:8000/api/genre/${genre}/`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        },
       );
       setBooks(res.data);
     } catch (error) {
@@ -27,8 +56,9 @@ const CustomBookList = ({genre}) => {
     }
   };
   useEffect(() => {
+    getToken();
     fetchData();
-  }, [genre]);
+  }, []);
   return (
     <ScrollView>
       {books.map(book => (

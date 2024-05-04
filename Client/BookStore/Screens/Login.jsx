@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -6,10 +7,38 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({navigation}) => {
-  const [email, setEmail] = useState('');
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const token = await axios.post(
+        'http://192.168.58.124:8000/api/token/',
+        {
+          username: userName,
+          password: password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      await AsyncStorage.setItem('token', token.data.access);
+      if (token.status === 200) {
+        navigation.navigate('HomeScreen');
+      } else {
+        console.error('Login failed:', token.data);
+      }
+    } catch (error) {
+      console.error('Error during login:', error.message);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={{justifyContent: 'center'}}>
@@ -20,8 +49,8 @@ const LoginScreen = ({navigation}) => {
       <TextInput
         style={styles.input}
         placeholder="Email or Phone Number"
-        value={email}
-        onChangeText={setEmail}
+        value={userName}
+        onChangeText={setUserName}
         autoCapitalize="none"
       />
       <TextInput
@@ -36,11 +65,7 @@ const LoginScreen = ({navigation}) => {
           <Text>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate('HomeScreen');
-        }}>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
     </View>
