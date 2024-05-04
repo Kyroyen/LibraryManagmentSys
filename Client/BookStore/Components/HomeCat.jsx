@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#808080',
     borderWidth: 1,
-    backgroundColor: '#F5EEE6',
+    backgroundColor: '#F0EBE3',
   },
   SecContainer: {
     padding: 5,

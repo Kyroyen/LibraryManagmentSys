@@ -83,7 +83,7 @@ const CustomBookList = ({genre}) => {
               <TouchableOpacity
                 style={{
                   padding: 10,
-                  backgroundColor: '#DD5746',
+                  backgroundColor: '#185bce',
                   width: 100,
                   borderRadius: 5,
                 }}
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
     paddingVertical: '3%',
     borderRadius: 10,
-    backgroundColor: '#FFF5E0',
+    backgroundColor: '#FAF7F0',
     elevation: 2,
     justifyContent: 'space-between',
     margin: 20,
@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
   },
   ContactDetails: {
     marginTop: '5%',
-
     gap: 10,
   },
   increment: {

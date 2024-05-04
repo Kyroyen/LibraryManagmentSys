@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, {useState} from 'react';
 import {
   StyleSheet,
@@ -6,17 +7,41 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const SignUpScreen = () => {
   const [email, setEmail] = useState('');
+  const [FirstName, setFirstName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [LastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const navigation = useNavigation();
 
-  const handleSignUp = () => {
-    // Implement your sign-up logic here
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
+  const handleSignUp = async () => {
+    try {
+      const response = await axios.post(
+        'http://192.168.58.124:8000/api/register/',
+        {
+          email: email,
+          firstname: FirstName,
+          lastname: LastName,
+          username: userName,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      if (response.status === 200) {
+        console.log('Registration successful:', response.data);
+        navigation.navigate('HomeScreen');
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Error during registration:', error.message);
+    }
   };
 
   return (
@@ -34,16 +59,29 @@ const SignUpScreen = () => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
+        placeholder="First Name"
+        value={FirstName}
+        onChangeText={setFirstName}
       />
       <TextInput
         style={styles.input}
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
+        placeholder="Last Name"
+        value={LastName}
+        onChangeText={setLastName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={userName}
+        onChangeText={setUserName}
+        autoCapitalize="none"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
@@ -64,14 +102,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     marginRight: 50,
-    color: '#DD5746',
+    color: '#185bce',
     justifyContent: 'flex-end',
   },
   secondTitle: {
     fontSize: 12,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#DD5746',
+    color: '#185bce',
     justifyContent: 'flex-end',
   },
   input: {
@@ -93,7 +131,7 @@ const styles = StyleSheet.create({
   buttonText: {
     padding: 15,
     paddingHorizontal: 100,
-    backgroundColor: '#DD5746',
+    backgroundColor: '#185bce',
     borderRadius: 15,
     color: 'white',
     fontWeight: '700',

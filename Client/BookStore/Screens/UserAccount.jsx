@@ -5,15 +5,22 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  RefreshControl,
-  Image,
 } from 'react-native';
-import React from 'react';
+import {React, useState} from 'react';
 import {Avatar, Title, Caption} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-// import AntDesign from 'react-native-vector-icons/AntDesign';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const UserAccount = () => {
+  const fetchData = async () => {
+    const res = axios.get('http://192.168.58.124:8000/api/');
+  };
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmailAddress] = useState('');
+  const [Username, setUsername] = useState('');
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -24,7 +31,12 @@ const UserAccount = () => {
               styles.backgroundStyle,
             ]}>
             <Avatar.Image source={require('../Assets/Avatar.png')} size={80} />
-            <View style={{marginLeft: 20}}>
+            <View
+              style={{
+                marginLeft: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <Title
                 style={[
                   styles.title,
@@ -33,9 +45,11 @@ const UserAccount = () => {
                     marginBottom: 5,
                   },
                 ]}>
-                <Text>Siddhant Keshari</Text>
+                <Text>
+                  {firstName}
+                  {lastName}
+                </Text>
               </Title>
-              <Caption style={styles.caption}>+91 8922915545</Caption>
             </View>
           </View>
         </View>
@@ -43,23 +57,15 @@ const UserAccount = () => {
         <View style={[styles.userInfoSectionTwo, styles.backgroundStyle]}>
           <View style={styles.row}>
             <Text>
-              <Icon name="location-pin" size={20} color="#E52B50" />
+              <AntDesign name="user" size={20} color="#E52B50" />
             </Text>
-            <Text style={{marginLeft: 20}}>
-              <Text>Lucknow, Uttar Pradesh</Text>
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text>
-              <Icon name="phone" size={20} color="#E52B50" />
-            </Text>
-            <Text style={{marginLeft: 20}}>+91 8922915545</Text>
+            <Text style={{marginLeft: 20}}>{Username}</Text>
           </View>
           <View style={styles.row}>
             <Text>
               <Icon name="mail" size={20} color="#E52B50" />
             </Text>
-            <Text style={{marginLeft: 20}}>siddhantkeshari76@gmail.com</Text>
+            <Text style={{marginLeft: 20}}>{email}</Text>
           </View>
         </View>
 

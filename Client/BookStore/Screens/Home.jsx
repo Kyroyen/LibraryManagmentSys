@@ -48,9 +48,11 @@ const Home = () => {
   };
 
   const getAllBooks = async () => {
-    const allBooksData = await fetchData(`http://192.168.58.124:8000/api/books/`);
+    const allBooksData = await fetchData(
+      `http://192.168.58.124:8000/api/books/`,
+    );
     setData(allBooksData);
-  }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -98,7 +100,7 @@ const Home = () => {
           />
           <View style={styles.cardStyle}>
             <Card>
-              <Card.Cover source={require('../Assets/Home.jpg')} />
+              <Card.Cover source={require('../Assets/Banner.jpg')} />
             </Card>
           </View>
           <View style={{marginLeft: 13, marginTop: 15}}>
@@ -130,7 +132,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   Searchbar: {
-    backgroundColor: '#F5EEE6',
+    backgroundColor: '#E3F6FF',
     marginTop: 10,
     borderColor: 'black',
     borderWidth: 1,

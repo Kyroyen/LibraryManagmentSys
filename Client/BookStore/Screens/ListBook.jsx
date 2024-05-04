@@ -8,7 +8,6 @@ import CustomListBook from '../Components/CustomListBook'
 const ListBook = () => {
   const route = useRoute();
   const {genre} = route.params;
-  console.log("Listbook", genre);
   return (
     <View>
      <CustomListBook genre={genre}/>

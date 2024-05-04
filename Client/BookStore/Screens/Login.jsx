@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,7 +10,6 @@ import {
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   return (
     <View style={styles.container}>
       <View style={{justifyContent: 'center'}}>
@@ -39,7 +38,9 @@ const LoginScreen = ({navigation}) => {
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('HomeScreen')}>
+        onPress={() => {
+          signIn();
+        }}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
     </View>
@@ -57,14 +58,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     marginRight: 70,
-    color: '#DD5746',
+    color: '#1f66e0',
     justifyContent: 'flex-end',
   },
   Secondtitle: {
     fontSize: 12,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#DD5746',
+    color: '#1f66e0',
     justifyContent: 'flex-end',
   },
   input: {
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   buttonText: {
     padding: 15,
     paddingHorizontal: 100,
-    backgroundColor: '#DD5746',
+    backgroundColor: '#185bce',
     borderRadius: 15,
     color: 'white',
     fontWeight: '700',

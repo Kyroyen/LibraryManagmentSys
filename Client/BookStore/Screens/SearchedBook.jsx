@@ -9,10 +9,9 @@ const SearchedBook = () => {
   console.log(books);
   return (
     <View>
-
-      <CustomBook book = {books}/>
+      <CustomBook book={books} />
     </View>
-  )
+  );
 }
 
 export default SearchedBook

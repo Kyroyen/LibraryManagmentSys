@@ -11,27 +11,32 @@ import {useNavigation} from '@react-navigation/native';
 
 const CustomBook = ({book}) => {
   const navigation = useNavigation();
+  console.log(book);
   return (
-    <ScrollView>
-      {book.map((book, index) => (
-        <View key={index} style={styles.container}>
+    <View>
+      <ScrollView>
+        <View key={book.index} style={styles.container}>
           <Image
-            source={{uri: book.book_image}}
+            source={{uri: book.item.book_image}}
             style={styles.ImagePic}
             resizeMode={'cover'}
           />
           <View style={styles.ContactDetails}>
-            <View style={{gap: 5, fontSize: 20, marginRight: '19%'}}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: 'Montserrat-Light',
-                  color: MD2Colors.black,
-                  fontWeight: '900',
-                }}>
-                {book.name}
+            <View style={{gap: 5, fontSize: 20, marginRight: '15%'}}>
+              <View style={{width: 120}}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontFamily: 'Montserrat-Light',
+                    color: MD2Colors.black,
+                    fontWeight: '900',
+                  }}>
+                  {book.item.name}
+                </Text>
+              </View>
+              <Text style={{color: 'grey', maxWidth: 130}}>
+                {book.item.author}
               </Text>
-              <Text style={{color: 'grey'}}>{book.author}</Text>
               <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
                 <View
                   style={{
@@ -63,21 +68,21 @@ const CustomBook = ({book}) => {
               <TouchableOpacity
                 style={{
                   padding: 10,
-                  backgroundColor: '#DD5746',
+                  backgroundColor: '#1f66e0',
                   width: 100,
                   borderRadius: 5,
                 }}>
                 <Text
                   style={{textAlign: 'center', color: 'white'}}
-                  onPress={() => navigation.navigate('BookPage', {book: book})}>
+                  onPress={() => {}}>
                   View Book
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
-      ))}
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -90,7 +95,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
     paddingVertical: '3%',
     borderRadius: 10,
-    backgroundColor: '#FFF5E0',
+    backgroundColor: '#FAF7F0',
     elevation: 2,
     justifyContent: 'space-between',
     margin: 20,
@@ -117,6 +122,7 @@ const styles = StyleSheet.create({
   },
   ContactDetails: {
     marginTop: '5%',
+    marginLeft: '10%',
     gap: 10,
   },
   increment: {

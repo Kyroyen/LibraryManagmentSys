@@ -1,10 +1,13 @@
-import LottieView from 'lottie-react-native';
-import {StyleSheet, View, Button, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Button, TouchableOpacity, Image} from 'react-native';
 import {Text} from 'react-native-paper';
 
 const Onboarding = ({navigation}) => {
   return (
     <View style={styles.MainContainer}>
+      <Image
+        style={styles.image}
+        source={require('../Assets/OnboardingImages/bookshelf.png')}
+      />
       <View style={styles.FirstContainer}>
         <Text variant="displayMedium" style={styles.Headtext}>
           Welcome to BookShelf !
@@ -25,13 +28,17 @@ const Onboarding = ({navigation}) => {
 export default Onboarding;
 
 const styles = StyleSheet.create({
+  image: {
+    height: 180,
+    marginTop: -55,
+  },
   MainContainer: {
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   Headtext: {
-    color: '#DD5746',
+    color: '#185bce',
     fontWeight: '900',
     fontSize: 24,
     fontFamily: 'Cochin',
@@ -44,7 +51,7 @@ const styles = StyleSheet.create({
   SecondText: {
     padding: 15,
     paddingHorizontal: 100,
-    backgroundColor: '#DD5746',
+    backgroundColor: '#185bce',
     borderRadius: 15,
     color: 'white',
     fontWeight: '700',
@@ -55,9 +62,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 90,
     backgroundColor: 'white',
     borderRadius: 15,
-    borderColor: 'red',
+    borderColor: '#96B6C5',
     borderWidth: 2,
-    color: '#DD5746',
+    color: '#185bce',
     fontWeight: '700',
     fontSize: 16,
     marginTop: 15,

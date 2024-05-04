@@ -11,11 +11,13 @@ import React from 'react';
 import items from '../Data/Caterory';
 import {useNavigation} from '@react-navigation/native';
 
+
 const Browse = () => {
   const navigation = useNavigation();
   const navigateToListBook = genre => {
-    navigation.navigate('ListBook',{genre});
+    navigation.navigate('ListBook', {genre});
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
