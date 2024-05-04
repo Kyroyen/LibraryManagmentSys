@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import CustomBook from '../Components/CustomBook';
+import axios from 'axios';
 
 const BooksIssued = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,12 +16,12 @@ const BooksIssued = () => {
   useEffect(() => {
     const fetchBooksOwned = async () => {
       try {
-        const response = await fetch('http://192.168.58.124:8000/api/owned/');
-        const data = await response.json();
+        const response = await axios.get(
+          'http://192.168.58.124:8000/api/owned/',
+        );
         setBooksOwned(data);
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching books owned:', error);
         setIsLoading(false);
       }
     };
@@ -28,29 +29,23 @@ const BooksIssued = () => {
     fetchBooksOwned();
   }, []);
 
-  const RenderItem = ({item}) => {
-    return (
-      <View style={styles.item}>
-        <CustomBook book={item} />
-      </View>
-    );
-  };
-
   return (
-    <View style={styles.container}>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" />
+      ) : booksOwned.length === 0 ? (
+        <Text>No books have been issued.</Text>
       ) : (
         <FlatList
           data={booksOwned}
-          renderItem={item => <RenderItem item={item} />}
+          renderItem={({item}) => <CustomBook book={item} />}
           keyExtractor={(item, index) => index.toString()}
         />
       )}
-      <View style={{height: 100}}></View>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
